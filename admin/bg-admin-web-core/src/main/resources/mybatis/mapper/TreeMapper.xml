@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.github.bg.admin.web.core.dao.TreeMapper">
+
+    <select id="getTreeList" resultType="string">
+        select CategoryName from bookcategory
+        where ParentId = 0 and del_flag=0
+    </select>
+
+    <select id="getTreeByTreeName" resultType="string" >
+        select CategoryName from bookcategory
+        where ParentId != 0 and del_flag=0
+    </select>
+
+    <select id="getTreeByTreeId" resultType="string" >
+        select ParentId from bookcategory
+        where ParentId != 0 and del_flag=0
+    </select>
+
+    <select id="getTreeByCategoryId" resultType="int" >
+        select CategoryId from bookcategory
+        where ParentId = 0 and del_flag=0
+    </select>
+
+    <select id="getTreeByCategoryIdNot0" resultType="int" >
+        select CategoryId from bookcategory
+        where ParentId != 0 and del_flag=0
+    </select>
+
+    <insert id="addFirstTree" parameterType="string">
+        insert into bookcategory (CategoryName,ParentId) values (#{firstName},#{parentTreeId});
+    </insert>
+
+    <update id="updateFirstTree" parameterType="string">
+        update bookcategory set CategoryName = #{firstName} where CategoryId=#{parentTreeId};
+    </update>
+
+    <update id="deleteFirstTree" parameterType="string">
+        update bookcategory set del_flag=1 where CategoryId=#{index};
+    </update>
+
+    <update id="deleteSecondTree" parameterType="string">
+        update bookcategory set del_flag=1 where CategoryId=#{index};
+    </update>
+
+</mapper>

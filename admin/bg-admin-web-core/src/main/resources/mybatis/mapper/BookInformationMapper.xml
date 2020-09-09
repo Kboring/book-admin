@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.github.bg.admin.web.core.dao.BookInformationMapper">
+
+    <select id="getAllBookInformation" resultType="com.github.bg.admin.web.core.entity.BookInformation">
+        select * from Bookinformation;
+    </select>
+
+    <select id="getcategoryByBookId" resultType="com.github.bg.admin.web.core.entity.BookInformation">
+        select * from Bookinformation where BookId=#{id};
+    </select>
+
+    <insert id="save"  parameterType="com.github.bg.admin.web.core.entity.dto.BookInformationDTO" useGeneratedKeys="true" keyProperty="BookId">
+        INSERT INTO bookinformation(BookName, Subhead, Publisher, Price, Introduction,BookThumb,StyleBook,CategoryId)
+        VALUES ( #{bookInformationDTO.BookName}, #{bookInformationDTO.Subhead}, #{bookInformationDTO.Publisher},
+        #{bookInformationDTO.Price}, #{bookInformationDTO.Introduction},#{bookInformationDTO.BookThumb},
+        #{bookInformationDTO.StyleBook},#{bookInformationDTO.CategoryId})
+    </insert>
+
+    <update id="update">
+        UPDATE bookinformation SET BookName = #{BookName},Publisher = #{Publisher},Price =#{Price},Subhead = #{Subhead},
+        Introduction = #{Introduction}, BookThumb = #{BookThumb}, StyleBook =#{StyleBook}
+        WHERE BookId = #{BookId} ;
+    </update>
+<!--    <update id="update">-->
+<!--        UPDATE `bookInformation` SET `BookName` = #{BookName}, `Subhead` = #{Subhead}, `Publisher` = #{Publisher},-->
+<!--        `Price` =#{Price},`Introduction` = #{Introduction}, `BookThumb` = #{BookThumb}, `StyleBook` =#{StyleBook},-->
+<!--        `create_by` = #{create_by}, `create_date` = #{create_date}, `update_by` = #{update_by}, `update_date` = #{update_date}, `remarks` = #{remarks}, `del_flag` = #{del_flag}-->
+<!--         WHERE `BookId` = #{BookId} ;-->
+<!--    </update>-->
+
+    <delete id="deleteById" parameterType="java.lang.Integer">
+        delete from BookInformation where BookId=#{id}
+    </delete>
+
+
+    <select id="queryBookList" resultType="com.github.bg.admin.web.core.entity.BookInformation">
+        select * from bookinformation where CategoryId=#{NewIndex}
+        <if test="search!=null and search!=''">
+            and (
+            BookId  like concat('%',#{search},'%') or
+            BookName  like concat('%',#{search},'%') or
+            Publisher  like concat('%',#{search},'%') or
+            Price  like concat('%',#{search},'%')
+            )
+        </if>
+        <foreach collection="BookArray" item="dictCode">
+            <if test="dictCode!=''">
+                and BookId like concat('%',#{BookId},'%')
+            </if>
+        </foreach>
+    </select>
+
+</mapper>
